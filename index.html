@@ -1,0 +1,133 @@
+<html>
+<head>
+	<title>sailing questions</title>
+	<script type="text/javascript">
+
+
+	var croatianMaps = 
+	{
+		"cv":"Knoten",
+		"M":"Nautische Meilen",
+		"V ka":"siehe Karte",
+		"V pl":"siehe Plan",
+		"B":"Weiß",
+		"Z":"Grün",
+		"C":"Rot",
+		"Pl":"Blau",
+		"Ž":"Gelb",
+		"Cr":"Schwarz",
+		"Na":"Orange",
+		"Lj":"Violett",
+		"Bl":"Blitz,Blink",
+		"Gr":"Fels",
+		"Hr":"Klippen",
+		"Bk":"Riff",
+		"Plic":"Untiefe",
+		"L":"Hafen",
+		"O":"Insel",
+		"U":"Bucht",
+		"k":"Steine",
+		"p":"Sand",
+		"m":"Schlamm",
+		"š":"Kies",
+		"Šk":"Muscheln",
+		"t":"Seegras",
+		"pm":"Sand+Schlamm",
+		"kor":"Korallen",
+		"Lt":"hell",
+		"Ho":"Leuchtturm",
+		"BN":"Funkfeuer",
+		"TR":"Funktturm",
+		"R":"Kreisförmig",
+		"Pot":"verdunkelt/gelöscht",
+		"BlGp":"Blitzgruppenfeuer",
+		"z":"Golf",
+	};
+
+	function randomKey(obj) {
+	    var keys = Object.keys(obj);
+	    return keys[ keys.length * Math.random() << 0];
+	};
+
+	function shuffleArray(array) {
+	    for (let i = array.length - 1; i > 0; i--) {
+	        const j = Math.floor(Math.random() * (i + 1));
+	        [array[i], array[j]] = [array[j], array[i]];
+	    }
+	}
+
+	function addRadio(div, text, value, onchecked)
+	{
+		var b = document.createElement("input");
+		b.type="radio";
+		b.name="answerRadios";
+		b.value = value;
+		b.id=value;
+		b.onclick = onchecked;
+		div.appendChild(b);
+
+		var l = document.createElement("label");
+		l.htmlFor =value;
+		l.innerHTML=text;
+		div.appendChild(l);
+		div.appendChild(document.createElement("br"));
+
+	}
+
+	function clear()
+	{
+		questionDiv.replaceChildren();
+		optionAnswer.replaceChildren();
+		textAnswer.value = "";
+	}
+
+	function askCroatianMap()
+	{
+		var q = randomKey(croatianMaps);
+		var answers = [croatianMaps[q]];
+		while(answers.length < 4)
+		{
+			var na = croatianMaps[randomKey(croatianMaps)];
+			if(!answers.includes(na))
+				answers.push(na);
+		}
+		shuffleArray(answers);
+
+		var onchecked= function(){
+			for (const child of optionAnswer.children) {
+				if(child.tagName != "LABEL")
+					continue;
+			  var correct = child.htmlFor == croatianMaps[q];
+			  console.log("clicked");
+			  child.style.backgroundColor = correct ? "#66ff66": "#ff6666";
+			}
+		};
+		for(var i=0; i<answers.length; i++ )
+			addRadio(optionAnswer, answers[i], answers[i], onchecked);
+		questionDiv.innerHTML = "Was bedeuted \""+q+"\" auf einer kroatischen Seekarte?";
+	}
+
+
+	function start()
+	{
+		askCroatianMap()
+	};
+
+	window.addEventListener("load", start);
+	</script>
+	<style>
+		input{
+			margin:10;
+		}
+		label
+		{
+			padding: 7;
+			width: 300px;
+		}
+	</style>
+</head>
+<div id="questionDiv" ></div>
+<div id="optionAnswer"></div>
+<br>
+<a href="">neue Frage</a>
+</html>
